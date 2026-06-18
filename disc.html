@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avaliação Comportamental DISC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: #1c1c1e;
+  --surface: #262628;
+  --surface-2: #2e2e31;
+  --border: rgba(255,255,255,0.09);
+  --border-strong: rgba(255,255,255,0.16);
+  --text: #f2f0ea;
+  --text-dim: #a8a6a0;
+  --text-faint: #74726c;
+
+  --d: #d85a30;
+  --d-dim: #4a2517;
+  --i: #e0a92f;
+  --i-dim: #4a3712;
+  --s: #4f9e6f;
+  --s-dim: #1c3b28;
+  --c: #4a85c4;
+  --c-dim: #1a3050;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.shell{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+.brand{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom: 40px;
+}
+.brand-name{
+  font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-faint); font-weight: 500;
+}
+.brand-tag{
+  font-size: 13px; color: var(--text-faint);
+}
+h1{
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.lead{
+  color: var(--text-dim);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-top: 14px;
+  max-width: 540px;
+}
+.screen{ display:none; }
+.screen.active{ display:block; }
+
+/* ---- INTRO ---- */
+.quad-grid{
+  display:grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin: 36px 0 40px;
+}
+.quad-card{
+  border:1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 18px;
+  background: var(--surface);
+}
+.quad-letter{
+  display:inline-flex; align-items:center; justify-content:center;
+  width: 30px; height:30px; border-radius:8px;
+  font-family:'Fraunces',serif; font-weight:600; font-size:16px;
+  margin-bottom: 10px;
+}
+.quad-card.d .quad-letter{ background:var(--d-dim); color:var(--d); }
+.quad-card.i .quad-letter{ background:var(--i-dim); color:var(--i); }
+.quad-card.s .quad-letter{ background:var(--s-dim); color:var(--s); }
+.quad-card.c .quad-letter{ background:var(--c-dim); color:var(--c); }
+.quad-title{ font-size:14.5px; font-weight:600; margin-bottom:4px; }
+.quad-desc{ font-size:13px; color:var(--text-dim); line-height:1.5; }
+
+.field{ margin-bottom: 18px; }
+.field label{
+  display:block; font-size:13px; color:var(--text-dim); margin-bottom:6px;
+}
+.field input{
+  width:100%; background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:12px 14px; color:var(--text); font-size:15px;
+  font-family:'Inter',sans-serif;
+}
+.field input:focus{ outline:none; border-color: var(--border-strong); }
+
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background: var(--text); color: var(--bg);
+  border:none; border-radius: 10px;
+  padding: 13px 22px; font-size:15px; font-weight:600;
+  font-family:'Inter',sans-serif; cursor:pointer;
+}
+.btn:disabled{ opacity:0.35; cursor:not-allowed; }
+.btn:active:not(:disabled){ transform: scale(0.98); }
+.btn-ghost{
+  background:transparent; color:var(--text-dim);
+  border:1px solid var(--border); font-weight:500;
+}
+
+/* ---- TEST ---- */
+.progress-row{
+  display:flex; align-items:center; gap:14px; margin-bottom: 36px;
+}
+.progress-track{
+  flex:1; height:4px; background: var(--surface); border-radius:2px; overflow:hidden;
+}
+.progress-fill{
+  height:100%; background: var(--text); border-radius:2px;
+  transition: width 0.3s ease;
+}
+.progress-label{
+  font-size:13px; color:var(--text-faint); white-space:nowrap; font-variant-numeric: tabular-nums;
+}
+.block-instruction{
+  font-size:13px; color:var(--text-faint); margin-bottom: 18px;
+  display:flex; gap:18px;
+}
+.block-instruction span{ display:flex; align-items:center; gap:6px; }
+.dot{ width:7px; height:7px; border-radius:50%; display:inline-block; }
+.dot.plus{ background: var(--s); }
+.dot.minus{ background: var(--d); }
+
+.option-row{
+  display:flex; align-items:center; justify-content:space-between;
+  border:1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom:10px;
+  background: var(--surface);
+  transition: border-color 0.15s;
+}
+.option-word{ font-size:16px; font-weight:500; }
+.option-controls{ display:flex; gap:8px; }
+.pill-btn{
+  width:38px; height:38px; border-radius:9px;
+  border:1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-size:16px; font-weight:600;
+  cursor:pointer; font-family:'Inter',sans-serif;
+  display:flex; align-items:center; justify-content:center;
+}
+.pill-btn.plus.active{ background: var(--s-dim); border-color: var(--s); color: var(--s); }
+.pill-btn.minus.active{ background: var(--d-dim); border-color: var(--d); color: var(--d); }
+.pill-btn:disabled{ opacity:0.25; cursor:not-allowed; }
+
+.block-error{
+  font-size:13px; color: var(--d); margin: 4px 0 18px; min-height:18px;
+}
+.nav-row{
+  display:flex; justify-content:space-between; align-items:center; margin-top: 28px;
+}
+
+/* ---- RESULT ---- */
+.result-header{ margin-bottom: 32px; }
+.profile-badge{
+  display:inline-flex; align-items:center; gap:10px;
+  padding: 8px 16px; border-radius: 100px;
+  font-size:14px; font-weight:600; margin-bottom:18px;
+}
+.metric-grid{
+  display:grid; grid-template-columns: repeat(4,1fr); gap:10px;
+  margin: 28px 0 36px;
+}
+.metric-card{
+  background: var(--surface); border-radius:12px; padding:16px 14px;
+  border:1px solid var(--border);
+}
+.metric-letter{ font-family:'Fraunces',serif; font-weight:600; font-size:20px; margin-bottom:8px; }
+.metric-bar-track{
+  height:5px; background: var(--surface-2); border-radius:3px; overflow:hidden; margin-bottom:8px;
+}
+.metric-bar-fill{ height:100%; border-radius:3px; }
+.metric-val{ font-size:12px; color:var(--text-faint); font-variant-numeric: tabular-nums; }
+
+.chart-wrap{ position:relative; height:320px; margin: 32px 0 8px; }
+
+.narrative-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:24px 26px; margin-top: 32px;
+}
+.narrative-card h3{
+  font-family:'Fraunces',serif; font-size:19px; font-weight:500; margin-bottom:10px;
+}
+.narrative-card p{ font-size:14.5px; line-height:1.65; color:var(--text-dim); }
+.narrative-card p + p{ margin-top:10px; }
+
+.section-label{
+  font-size:12px; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--text-faint); font-weight:600; margin: 36px 0 14px;
+}
+
+.combo-row{
+  display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;
+}
+.combo-tag{
+  font-size:13px; padding:7px 13px; border-radius:8px;
+  background: var(--surface-2); color: var(--text-dim); border:1px solid var(--border);
+}
+
+footer{ margin-top:56px; font-size:12px; color:var(--text-faint); text-align:center; }
+
+@media (max-width: 560px){
+  h1{ font-size:30px; }
+  .quad-grid{ grid-template-columns: 1fr; }
+  .metric-grid{ grid-template-columns: repeat(2,1fr); }
+  .option-word{ font-size:14.5px; }
+  .shell{ padding: 32px 16px 60px; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="brand">
+    <div class="brand-name"> Avaliação comportamental</div>
+    <div class="brand-tag" id="step-indicator"></div>
+  </div>
+
+  <!-- SCREEN: INTRO -->
+  <div class="screen active" id="screen-intro">
+    <h1>Mapeamento de perfil DISC</h1>
+    <p class="lead">28 blocos com quatro palavras cada. Em cada bloco, marque a palavra que <strong style="color:var(--text)">mais</strong> se parece com você no trabalho e a que <strong style="color:var(--text)">menos</strong> se parece. Leva cerca de 8 minutos.</p>
+
+    <div class="quad-grid">
+      <div class="quad-card d">
+        <div class="quad-letter">D</div>
+        <div class="quad-title">Dominância</div>
+        <div class="quad-desc">Foco em resultado, decisão rápida, gosta de desafio e controle.</div>
+      </div>
+      <div class="quad-card i">
+        <div class="quad-letter">I</div>
+        <div class="quad-title">Influência</div>
+        <div class="quad-desc">Comunicativo, otimista, constrói relações e entusiasma o grupo.</div>
+      </div>
+      <div class="quad-card s">
+        <div class="quad-letter">S</div>
+        <div class="quad-title">Estabilidade</div>
+        <div class="quad-desc">Paciente, leal, busca cooperação e previsibilidade no dia a dia.</div>
+      </div>
+      <div class="quad-card c">
+        <div class="quad-letter">C</div>
+        <div class="quad-title">Conformidade</div>
+        <div class="quad-desc">Analítico, criterioso, preza por precisão e processo bem definido.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="input-name">Seu nome</label>
+      <input type="text" id="input-name" placeholder="Como você quer aparecer no resultado">
+    </div>
+    <div class="field">
+      <label for="input-area">Área / equipe (opcional)</label>
+      <input type="text" id="input-area" placeholder="Ex: Comercial, Financeiro, Operações">
+    </div>
+
+    <button class="btn" id="btn-start" onclick="startTest()">Começar avaliação</button>
+  </div>
+
+  <!-- SCREEN: TEST -->
+  <div class="screen" id="screen-test">
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="progress-label" id="progress-label">Bloco 1 de 28</div>
+    </div>
+    <div class="block-instruction">
+      <span><span class="dot plus"></span>mais se parece com você</span>
+      <span><span class="dot minus"></span>menos se parece com você</span>
+    </div>
+    <div id="block-options"></div>
+    <div class="block-error" id="block-error"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="btn-back" onclick="prevBlock()">Voltar</button>
+      <button class="btn" id="btn-next" onclick="nextBlock()">Próximo bloco</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="result-header">
+      <div class="profile-badge" id="profile-badge"></div>
+      <h1 id="result-name-title">Seu perfil comportamental</h1>
+      <p class="lead" id="result-lead"></p>
+    </div>
+
+    <div class="section-label">Perfil "mais" (como você age naturalmente sob pressão de adaptação)</div>
+    <div class="metric-grid" id="metric-grid-mais"></div>
+
+    <div class="chart-wrap"></div>
+
+    <div class="narrative-card" id="narrative-card">
+      <h3 id="narrative-title"></h3>
+      <p id="narrative-body"></p>
+    </div>
+
+    <div class="section-label">Combinação observada</div>
+    <div class="combo-row" id="combo-row"></div>
+
+    <div class="nav-row" style="margin-top:40px;">
+      <button class="btn btn-ghost" onclick="restart()">Refazer avaliação</button>
+      <button class="btn" onclick="window.print()">Salvar como PDF</button>
+    </div>
+  </div>
+
+  <footer> Ferramenta interna de avaliação comportamental DISC · uso para desenvolvimento de equipe, não para decisões de desligamento</footer>
+</div>
+
+<script>
+// ===== DATA: 28 blocks, each [word, dimension] x4 (revised version) =====
+const BLOCKS = [[["Entusiasta", "I"], ["Ousado", "D"], ["Diplomático", "C"], ["Satisfeito", "S"]], [["Cauteloso", "C"], ["Decidido", "D"], ["Receptivo", "S"], ["Alegre", "I"]], [["Amigável", "I"], ["Preciso", "C"], ["Persistente", "D"], ["Calmo", "S"]], [["Força de Vontade", "D"], ["Convincente", "I"], ["Atencioso", "S"], ["Respeitoso", "C"]], [["Estimulante", "I"], ["Gentil", "S"], ["Independente", "D"], ["Sistemático", "C"]], [["Cuidadoso", "C"], ["Corajoso", "D"], ["Espontâneo", "I"], ["Equilibrado", "S"]], [["Expressivo", "I"], ["Meticuloso", "C"], ["Dominante", "D"], ["Discreto", "S"]], [["Influente", "I"], ["Amável", "S"], ["Criterioso", "C"], ["Direto", "D"]], [["Organizado", "C"], ["Ativo", "D"], ["Sociável", "I"], ["Estável", "S"]], [["Tolerante", "S"], ["Crítico", "C"], ["Competitivo", "D"], ["Comunicativo", "I"]], [["Modesto", "S"], ["Visionário", "D"], ["Analítico", "C"], ["Descontraído", "I"]], [["Autoconfiante", "D"], ["Compreensivo", "S"], ["Falante", "I"], ["Convencional", "C"]], [["Perceptivo", "C"], ["Incisivo", "D"], ["Caloroso", "I"], ["Tranquilo", "S"]], [["Meticuloso", "C"], ["Incentivador", "I"], ["Determinado", "D"], ["Sereno", "S"]], [["Popular", "I"], ["Reflexivo", "C"], ["Tenaz", "D"], ["Calmo", "S"]], [["Analítico", "C"], ["Audaz", "D"], ["Leal", "S"], ["Animado", "I"]], [["Sociável", "I"], ["Paciente", "S"], ["Autossuficiente", "D"], ["Lógico", "C"]], [["Adaptável", "S"], ["Disposto", "I"], ["Rigoroso", "C"], ["Energético", "D"]], [["Agressivo", "D"], ["Extrovertido", "I"], ["Amável", "S"], ["Metódico", "C"]], [["Carismático", "I"], ["Simpático", "S"], ["Imparcial", "C"], ["Assertivo", "D"]], [["Disciplinado", "C"], ["Generoso", "S"], ["Persuasivo", "I"], ["Competitivo", "D"]], [["Arrojado", "D"], ["Ponderado", "C"], ["Tolerante", "S"], ["Cativante", "I"]], [["Cooperativo", "S"], ["Investigativo", "C"], ["Destemido", "D"], ["Convincente", "I"]], [["Reservado", "C"], ["Resoluto", "D"], ["Cordial", "S"], ["Otimista", "I"]], [["Perfeccionista", "C"], ["Decidido", "D"], ["Estimulante", "I"], ["Pacifista", "S"]], [["Acolhedor", "S"], ["Detalhista", "C"], ["Direto", "D"], ["Inspirador", "I"]], [["Inquieto", "D"], ["Amigável", "I"], ["Sistemático", "C"], ["Conciliador", "S"]], [["Independente", "D"], ["Organizado", "C"], ["Previsível", "S"], ["Radiante", "I"]]];
+
+const DIM_INFO = {
+  D: { name: "Dominância", color: "#d85a30" },
+  I: { name: "Influência",  color: "#e0a92f" },
+  S: { name: "Estabilidade", color: "#4f9e6f" },
+  C: { name: "Conformidade", color: "#4a85c4" }
+};
+
+const PROFILE_TEXT = {
+  D: {
+    title: "Foco total em resultado",
+    body: "Você se orienta por metas, decide rápido e não se incomoda em confrontar problemas diretamente. Tende a se entediar com excesso de detalhe ou processo lento. Em equipe, funciona melhor quando tem autonomia e um objetivo claro para perseguir; pode atritar com pessoas que precisam de mais tempo para se posicionar."
+  },
+  I: {
+    title: "Energia que move o grupo",
+    body: "Você se conecta com facilidade, comunica com entusiasmo e gosta de estar perto de gente. Costuma motivar a equipe pelo exemplo e pelo discurso, mas pode perder o fio em tarefas muito solitárias ou repetitivas. Funciona melhor em ambientes que valorizam visibilidade e troca constante."
+  },
+  S: {
+    title: "Consistência e cooperação",
+    body: "Você valoriza estabilidade, é leal ao grupo e prefere previsibilidade a mudanças abruptas. Tende a evitar conflito direto e a sustentar a rotina mesmo sob pressão. Funciona melhor com prazos claros e mudanças bem comunicadas com antecedência; pode demorar a se posicionar quando discorda."
+  },
+  C: {
+    title: "Precisão antes de tudo",
+    body: "Você analisa antes de decidir, preza por dados e processo bem definido, e costuma identificar riscos que outros não veem. Pode travar diante de decisões com informação incompleta ou prazo curto. Funciona melhor quando tem critério claro e tempo para validar; tende a ser visto como reservado em ambientes muito informais."
+  }
+};
+
+const COMBO_TEXT = {
+  "D-I": "Empreendedor — combina ímpeto de resultado com capacidade de convencer e mobilizar pessoas.",
+  "D-C": "Estrategista — decide rápido mas exige dados e lógica antes de agir.",
+  "D-S": "Executor estável — busca resultado sem abrir mão de consistência no processo.",
+  "I-D": "Líder carismático — usa influência pessoal para empurrar resultado.",
+  "I-S": "Conector — constrói relação genuína e mantém o grupo coeso no longo prazo.",
+  "I-C": "Comunicador analítico — entusiasma, mas sustenta o discurso com dados.",
+  "S-D": "Estabilizador firme — mantém a rotina, mas não recua quando precisa decidir.",
+  "S-I": "Apoiador sociável — sustenta o grupo emocionalmente e cultiva relações de confiança.",
+  "S-C": "Guardião de processo — entrega consistência com atenção a detalhe e regra.",
+  "C-D": "Analista decisivo — pensa antes de agir, mas age com firmeza quando decide.",
+  "C-I": "Especialista comunicativo — domina o conteúdo técnico e sabe apresentá-lo.",
+  "C-S": "Planejador meticuloso — entrega precisão com paciência e constância."
+};
+
+let state = { name: "", area: "", current: 0, answers: [] };
+// answers[i] = { plus: 0|1|2|3 (index), minus: 0|1|2|3 }
+
+function $(id){ return document.getElementById(id); }
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+function startTest(){
+  state.name = $('input-name').value.trim() || "Você";
+  state.area = $('input-area').value.trim();
+  state.current = 0;
+  state.answers = BLOCKS.map(()=>({plus:null,minus:null}));
+  showScreen('screen-test');
+  renderBlock();
+}
+
+function renderBlock(){
+  const idx = state.current;
+  const block = BLOCKS[idx];
+  const ans = state.answers[idx];
+  $('progress-label').textContent = `Bloco ${idx+1} de ${BLOCKS.length}`;
+  $('progress-fill').style.width = `${(idx/BLOCKS.length)*100}%`;
+  $('step-indicator').textContent = `${idx+1} / ${BLOCKS.length}`;
+
+  const container = $('block-options');
+  container.innerHTML = '';
+  block.forEach((opt, i)=>{
+    const row = document.createElement('div');
+    row.className = 'option-row';
+    row.innerHTML = `
+      <div class="option-word">${opt[0]}</div>
+      <div class="option-controls">
+        <button class="pill-btn plus ${ans.plus===i?'active':''}" onclick="selectOption(${i},'plus')" ${ans.minus===i?'disabled':''}>+</button>
+        <button class="pill-btn minus ${ans.minus===i?'active':''}" onclick="selectOption(${i},'minus')" ${ans.plus===i?'disabled':''}>−</button>
+      </div>`;
+    container.appendChild(row);
+  });
+
+  $('btn-back').disabled = idx===0;
+  $('btn-back').style.visibility = idx===0 ? 'hidden' : 'visible';
+  $('btn-next').textContent = idx===BLOCKS.length-1 ? 'Ver resultado' : 'Próximo bloco';
+  $('block-error').textContent = '';
+}
+
+function selectOption(i, type){
+  const ans = state.answers[state.current];
+  if(type==='plus'){ ans.plus = (ans.plus===i)? null : i; }
+  else { ans.minus = (ans.minus===i)? null : i; }
+  renderBlock();
+}
+
+function prevBlock(){
+  if(state.current>0){ state.current--; renderBlock(); }
+}
+
+function nextBlock(){
+  const ans = state.answers[state.current];
+  if(ans.plus===null || ans.minus===null){
+    $('block-error').textContent = 'Marque uma opção como "mais" e uma como "menos" antes de continuar.';
+    return;
+  }
+  if(state.current < BLOCKS.length-1){
+    state.current++;
+    renderBlock();
+  } else {
+    computeResult();
+  }
+}
+
+function computeResult(){
+  const mais = { D:0, I:0, S:0, C:0 };
+  const menos = { D:0, I:0, S:0, C:0 };
+  state.answers.forEach((ans, idx)=>{
+    const block = BLOCKS[idx];
+    mais[block[ans.plus][1]]++;
+    menos[block[ans.minus][1]]++;
+  });
+  const grafico = { D: mais.D-menos.D, I: mais.I-menos.I, S: mais.S-menos.S, C: mais.C-menos.C };
+
+  showScreen('screen-result');
+  try{
+    renderResult(mais, menos, grafico);
+  }catch(err){
+    console.error('Erro ao renderizar resultado:', err);
+  }
+}
+
+function renderResult(mais, menos, grafico){
+  const dims = ['D','I','S','C'];
+  const sorted = [...dims].sort((a,b)=>mais[b]-mais[a]);
+  const primary = sorted[0];
+  const secondary = sorted[1];
+  const maxVal = Math.max(...dims.map(d=>mais[d]), 1);
+
+  $('result-name-title').textContent = `Perfil de ${state.name}`;
+  $('result-lead').textContent = state.area
+    ? `Equipe: ${state.area} · Avaliação baseada em 28 blocos de escolha forçada.`
+    : `Avaliação baseada em 28 blocos de escolha forçada.`;
+
+  const badge = $('profile-badge');
+  badge.style.background = DIM_INFO[primary].color + '22';
+  badge.style.color = DIM_INFO[primary].color;
+  badge.innerHTML = `Perfil predominante: <strong>${DIM_INFO[primary].name} (${primary})</strong>`;
+
+  const grid = $('metric-grid-mais');
+  grid.innerHTML = '';
+  dims.forEach(d=>{
+    const card = document.createElement('div');
+    card.className = 'metric-card';
+    const pct = Math.round((mais[d]/28)*100);
+    card.innerHTML = `
+      <div class="metric-letter" style="color:${DIM_INFO[d].color}">${d}</div>
+      <div class="metric-bar-track"><div class="metric-bar-fill" style="width:${(mais[d]/maxVal)*100}%; background:${DIM_INFO[d].color}"></div></div>
+      <div class="metric-val">${mais[d]} de 28 · ${pct}%</div>`;
+    grid.appendChild(card);
+  });
+
+  $('narrative-title').textContent = PROFILE_TEXT[primary].title;
+  $('narrative-body').textContent = PROFILE_TEXT[primary].body;
+
+  const comboKey = `${primary}-${secondary}`;
+  const comboRow = $('combo-row');
+  comboRow.innerHTML = `<div class="combo-tag" style="border-color:${DIM_INFO[primary].color}66">${DIM_INFO[primary].name} + ${DIM_INFO[secondary].name}</div>`;
+  if(COMBO_TEXT[comboKey]){
+    const p = document.createElement('p');
+    p.style.fontSize = '14px';
+    p.style.color = 'var(--text-dim)';
+    p.style.marginTop = '12px';
+    p.style.lineHeight = '1.6';
+    p.textContent = COMBO_TEXT[comboKey];
+    comboRow.parentElement.appendChild(p);
+  }
+
+  renderChart(mais);
+}
+
+let chartInstance = null;
+function renderChart(mais){
+  const wrap = document.querySelector('.chart-wrap');
+  const dims = ['D','I','S','C'];
+  const labels = ['Dominância (D)', 'Influência (I)', 'Estabilidade (S)', 'Conformidade (C)'];
+  const colors = { D:'#d85a30', I:'#e0a92f', S:'#4f9e6f', C:'#4a85c4' };
+  const maxScale = 14;
+  const cx = 160, cy = 160, r = 120;
+  const angle = (i)=> (Math.PI*2*i/4) - Math.PI/2;
+
+  function pointAt(i, value){
+    const a = angle(i);
+    const dist = (Math.min(value, maxScale)/maxScale) * r;
+    return [cx + dist*Math.cos(a), cy + dist*Math.sin(a)];
+  }
+
+  let gridRings = '';
+  [0.25,0.5,0.75,1].forEach(frac=>{
+    const pts = dims.map((d,i)=>{
+      const a = angle(i);
+      const dist = frac*r;
+      return `${cx+dist*Math.cos(a)},${cy+dist*Math.sin(a)}`;
+    }).join(' ');
+    gridRings += `<polygon points="${pts}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+  });
+
+  let axisLines = '';
+  let axisLabels = '';
+  dims.forEach((d,i)=>{
+    const a = angle(i);
+    const [lx,ly] = [cx + r*Math.cos(a), cy + r*Math.sin(a)];
+    axisLines += `<line x1="${cx}" y1="${cy}" x2="${lx}" y2="${ly}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+    const [tx,ty] = [cx + (r+26)*Math.cos(a), cy + (r+26)*Math.sin(a)];
+    axisLabels += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle" fill="#f2f0ea" font-size="13" font-family="Inter, sans-serif">${labels[i]}</text>`;
+  });
+
+  const dataPts = dims.map((d,i)=>pointAt(i, mais[d]));
+  const dataPolygon = dataPts.map(p=>p.join(',')).join(' ');
+
+  let dataDots = '';
+  dims.forEach((d,i)=>{
+    const [px,py] = dataPts[i];
+    dataDots += `<circle cx="${px}" cy="${py}" r="5" fill="${colors[d]}"/>`;
+    dataDots += `<text x="${px}" y="${py-12}" text-anchor="middle" fill="${colors[d]}" font-size="12" font-weight="600" font-family="Inter, sans-serif">${mais[d]}</text>`;
+  });
+
+  const svg = `
+    <svg viewBox="0 0 320 340" width="100%" height="100%" role="img" aria-label="Gráfico radar do perfil DISC: Dominância ${mais.D}, Influência ${mais.I}, Estabilidade ${mais.S}, Conformidade ${mais.C} de 28">
+      ${gridRings}
+      ${axisLines}
+      <polygon points="${dataPolygon}" fill="rgba(216,90,48,0.16)" stroke="#d85a30" stroke-width="2"/>
+      ${dataDots}
+      ${axisLabels}
+    </svg>`;
+  wrap.innerHTML = svg;
+}
+
+function restart(){
+  $('input-name').value = '';
+  $('input-area').value = '';
+  showScreen('screen-intro');
+}
+</script>
+</body>
+</html>
